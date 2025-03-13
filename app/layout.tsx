@@ -3,7 +3,7 @@ import { Dosis } from "next/font/google";
 import "./globals.css";
 
 const dosis = Dosis({
-  weight: '400',
+  weight: ['400', '700', '800'],
   subsets: ["latin"],
 });
 
