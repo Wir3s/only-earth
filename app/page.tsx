@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Script from 'next/script';
+import Link from 'next/link';
 
 export default function Home() {
   return (
@@ -22,9 +23,16 @@ export default function Home() {
         <h2 className="text-lg">
           Technological Solutions For A Healthy Planet
         </h2>
+        <Link 
+  href="/globe" 
+  className="mt-4 mb-18 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+>
+  Explore Our Interactive Globe
+</Link>
+
       </section>
 
-      {/* Comments Section: Users scroll down to access comments */}
+     
       <section className="p-8 fade-in" style={{ animationDelay: '0.5s' }}>
         <div className="w-full max-w-3xl mx-auto">
         <p className="text-lg">
