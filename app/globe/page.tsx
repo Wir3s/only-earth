@@ -5,14 +5,9 @@
 import { useState } from 'react';
 import GlobeScene from '../../components/Globe';
 import DeforestationUI from '../../components/DeforestationUI';
+import CitationFooter from '@/components/CitationFooter';
+import categoryColors from '@/lib/categoryColors';
 
-const categoryColors: { [key: string]: string } = {
-  New: '#FF4500',         // Bright OrangeRed
-  Sporadic: '#FF8C00',    // DarkOrange remains
-  Intensifying: '#B22222', // FireBrick, a deep red
-  Persistent: '#A0522D',   // Sienna, a brownish tone
-  Diminishing: '#A9A9A9',  // Dim Gray
-};
 
 
 export default function GlobePage() {
@@ -37,6 +32,7 @@ export default function GlobePage() {
       {/* Title Header */}
       <div className="absolute top-0 left-0 w-full text-center p-4 z-20 bg-opacity-80">
         <h1 className="text-3xl font-bold">Emerging Hot Spots</h1>
+        <h2 className="text-2xl font-bold">Primary Forest Loss</h2>
         <p className="text-lg">2002-2023, tropics, WRI</p>
       </div>
 
@@ -50,6 +46,8 @@ export default function GlobePage() {
       <main className="h-screen">
         <GlobeScene activeCategories={activeCategories} />
       </main>
+
+      <CitationFooter />
     </>
   );
 }

@@ -1,10 +1,10 @@
 // lib/categoryColors.ts
 const categoryColors: { [key: string]: string } = {
-    New: '#FF4500',
-    Sporadic: '#FF8C00',
-    Intensifying: '#B22222',
-    Persistent: '#A0522D',
-    Diminishing: '#A9A9A9',
+    Diminishing: "#00FF00",   // Bright green
+    Persistent: "#FFFF00",    // Bright yellow
+    Intensifying: "#8B0000",  // Dark red
+    Sporadic: "#800080",      // Purple
+    New: "#FF0000",           // Bright red
   };
   
   export default categoryColors;

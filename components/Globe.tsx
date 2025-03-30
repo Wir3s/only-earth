@@ -44,24 +44,24 @@ function ApiStatus() {
   }, []);
 
   // Position this status indicator in the top-right corner of the canvas
-  return (
-    <Html position={[0, 2.5, 0]} center>
-      <div className="text-xs bg-black bg-opacity-70 text-white p-2 rounded" style={{ width: '200px' }}>
-        <h4 className="font-bold mb-1">GFW API Status:</h4>
-        {apiStatus.loading ? (
-          <p>Connecting to GFW API...</p>
-        ) : apiStatus.success ? (
-          <p className="text-green-400">
-            ✓ Connected ({apiStatus.featureCount || 0} hotspots found)
-          </p>
-        ) : (
-          <p className="text-red-400">
-            ✗ Connection error: {apiStatus.error || 'Unknown'}
-          </p>
-        )}
-      </div>
-    </Html>
-  );
+  // return (
+  //   <Html position={[0, 2.5, 0]} center>
+  //     <div className="text-xs bg-black bg-opacity-70 text-white p-2 rounded" style={{ width: '200px' }}>
+  //       <h4 className="font-bold mb-1">GFW API Status:</h4>
+  //       {apiStatus.loading ? (
+  //         <p>Connecting to GFW API...</p>
+  //       ) : apiStatus.success ? (
+  //         <p className="text-green-400">
+  //           ✓ Connected ({apiStatus.featureCount || 0} hotspots found)
+  //         </p>
+  //       ) : (
+  //         <p className="text-red-400">
+  //           ✗ Connection error: {apiStatus.error || 'Unknown'}
+  //         </p>
+  //       )}
+  //     </div>
+  //   </Html>
+  // );
 }
 
 function GlobeContent({ texture, activeCategories }: { texture: THREE.Texture, activeCategories: string[] }) {
@@ -85,7 +85,7 @@ function GlobeContent({ texture, activeCategories }: { texture: THREE.Texture, a
       )}
       
       {/* Add API status indicator */}
-      <ApiStatus />
+      {/* <ApiStatus /> */}
       
       <OrbitControls
         enableZoom={true}
