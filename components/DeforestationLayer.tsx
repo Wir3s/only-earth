@@ -1,36 +1,12 @@
 // components/DeforestationLayer.tsx
 'use client';
-
-interface DataPoint {
-  lat: number;
-  lon: number;
-  category: string;
-  rate: number;
-}
-
-const sampleData: DataPoint[] = [
-  { lat: -3.4653, lon: -62.2159, category: 'Intensifying', rate: 5 },
-  { lat: -10.0, lon: 120.0, category: 'Sporadic', rate: 3 },
-  { lat: 5.0, lon: 30.0, category: 'New', rate: 2 },
-];
-
-function latLongToVector3(lat: number, lon: number, radius: number) {
-  const phi = (90 - lat) * (Math.PI / 180);
-  const theta = (lon + 180) * (Math.PI / 180);
-  const x = -radius * Math.sin(phi) * Math.cos(theta);
-  const z = radius * Math.sin(phi) * Math.sin(theta);
-  const y = radius * Math.cos(phi);
-  return [x, y, z];
-}
-
-const categoryColors: { [key: string]: string } = {
-  New: '#FF4500',         // Bright OrangeRed
-  Sporadic: '#FF8C00',    // DarkOrange remains
-  Intensifying: '#B22222', // FireBrick, a deep red
-  Persistent: '#A0522D',   // Sienna, a brownish tone
-  Diminishing: '#A9A9A9',  // Dim Gray
-};
-
+import { useEffect, useState, useMemo } from 'react';
+import { useThree } from '@react-three/fiber';
+import { Html, Sphere } from '@react-three/drei'; // Add this import
+import { fetchDeforestationData } from '../lib/gfwApi';
+import { createHotspotTexture } from '../lib/geoJsonToTexture';
+import * as THREE from 'three';
+import categoryColors from '../lib/categoryColors';
 
 export default function DeforestationLayer({
   globeRadius = 2,
@@ -39,20 +15,118 @@ export default function DeforestationLayer({
   globeRadius?: number;
   activeCategories: string[];
 }) {
-  return (
-    <>
-      {sampleData.map((point, index) => {
-        if (!activeCategories.includes(point.category)) return null;
-        const [x, y, z] = latLongToVector3(point.lat, point.lon, globeRadius);
-        const scale = 0.05 * point.rate;
-        return (
-          <mesh key={index} position={[x, y, z]}>
-            <sphereGeometry args={[scale, 8, 8]} />
-            <meshStandardMaterial color={categoryColors[point.category]} />
-          </mesh>
+  const [isLoading, setIsLoading] = useState(true);
+  const [hotspotTexture, setHotspotTexture] = useState<THREE.Texture | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  
+  const { camera } = useThree();
+  
+// Calculate current view bounds based on camera position
+const viewBounds = useMemo(() => {
+  // Cast camera to PerspectiveCamera to access fov and aspect
+  const perspCamera = camera as THREE.PerspectiveCamera;
+  
+  const distance = camera.position.length();
+  const fov = perspCamera.fov * (Math.PI / 180);
+  const visibleHeight = 2 * Math.tan(fov / 2) * distance;
+  const visibleWidth = visibleHeight * perspCamera.aspect;
+  
+  // Convert to lat/lon bounds (simplified)
+  const bounds = [-visibleWidth/2, -visibleHeight/2, visibleWidth/2, visibleHeight/2];
+  return bounds;
+}, [camera.position, camera]);
+  
+  useEffect(() => {
+    let isMounted = true;
+    
+    async function loadData() {
+      setIsLoading(true);
+      setErrorMessage(null);
+      
+      try {
+        const data = await fetchDeforestationData(viewBounds);
+        
+        if (!isMounted) return;
+        
+        // Filter data by active categories if needed
+        const filteredData = {
+          ...data,
+          features: data.features.filter((feature: any) => {
+            // Get the category from attributes
+            const pattern = feature.attributes?.PATTERN || '';
+            // Normalize it by removing " Hot Spot" if present
+            const normalized = pattern.replace(" Hot Spot", "");
+            return activeCategories.includes(normalized);
+          })
+        };
+        
+        const texture = createHotspotTexture(
+          filteredData,
+          4096, 
+          2048,
+          categoryColors, // Pass your mapping here
+          0.6
         );
-      })}
-    </>
+        
+        setHotspotTexture(texture);
+      } catch (error) {
+        console.error("Error loading deforestation data:", error);
+        if (isMounted) {
+          setErrorMessage("Failed to load deforestation data");
+        }
+      } finally {
+        if (isMounted) {
+          setIsLoading(false);
+        }
+      }
+    }
+    
+    if (activeCategories.length > 0) {
+      loadData();
+    } else {
+      setHotspotTexture(null);
+      setIsLoading(false);
+    }
+    
+    return () => {
+      isMounted = false;
+    };
+  }, [viewBounds, activeCategories]);
+  
+  if (isLoading) {
+    return (
+      <Html center>
+        <div className="text-white bg-black bg-opacity-50 p-2 rounded">
+          Loading deforestation data...
+        </div>
+      </Html>
+    );
+  }
+  
+  if (errorMessage) {
+    return (
+      <Html center>
+        <div className="text-white bg-black bg-opacity-50 p-2 rounded">
+          Error: {errorMessage}
+        </div>
+      </Html>
+    );
+  }
+  
+  if (!hotspotTexture) return null;
+  
+  return (
+    <Sphere args={[globeRadius + 0.01, 64, 64]}>
+      <meshBasicMaterial
+        map={hotspotTexture}
+        transparent={true}
+        opacity={0.8}
+        depthWrite={false}
+      />
+    </Sphere>
   );
 }
+
+
+
 

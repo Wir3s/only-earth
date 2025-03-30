@@ -28,7 +28,7 @@ export default function Home() {
         </h2>
         <Link 
           href="/globe" 
-          className="mt-4 mb-18 inline-block px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+          className="mt-4 mb-30 inline-block px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
         >
           Explore Our Interactive Globe
         </Link>
