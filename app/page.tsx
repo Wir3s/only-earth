@@ -9,7 +9,7 @@ export default function Home() {
   return (
     <>
       {/* Hero Section */}
-      <section className="flex flex-col items-center justify-center h-screen p-8 text-center space-y-4 fade-in">
+      <section className="flex flex-col items-center justify-center min-h-screen p-8 text-center space-y-4 fade-in">
         <div className="w-full max-w-md md:max-w-lg lg:max-w-xl">
           <Image 
             src="/main-image.webp" 
@@ -28,7 +28,7 @@ export default function Home() {
         </h2>
         <Link 
           href="/globe" 
-          className="mt-4 mb-30 inline-block px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+          className="mt-4 mb-2 inline-block px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
         >
           Explore Our Interactive Globe
         </Link>
