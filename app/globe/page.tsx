@@ -30,7 +30,7 @@ export default function GlobePage() {
   return (
     <>
       {/* Title Header */}
-      <div className="absolute top-0 left-0 w-full text-center p-4 z-20 bg-opacity-80">
+      <div className="absolute top-0 left-0 w-full text-center p-4 z-20 bg-opacity-80 pointer-events-none">
         <h1 className="text-3xl font-bold">Emerging Hot Spots</h1>
         <h2 className="text-2xl font-bold">Primary Forest Loss</h2>
         <p className="text-lg">2002-2023, tropics, WRI</p>
