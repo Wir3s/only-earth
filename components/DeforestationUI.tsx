@@ -14,11 +14,10 @@ export default function DeforestationUI({
   categoryColors: { [key: string]: string };
 }) {
   const [isCollapsed, setIsCollapsed] = useState(false);
-  // Create a ref for the draggable node
   const nodeRef = useRef<HTMLDivElement>(null);
 
   return (
-    <Draggable nodeRef={nodeRef as React.RefObject<HTMLDivElement>}>
+    <Draggable nodeRef={nodeRef as React.RefObject<HTMLElement>} cancel=".toggle-btn">
       <div
         ref={nodeRef}
         style={{
@@ -35,6 +34,7 @@ export default function DeforestationUI({
         }}
       >
         <button
+          className="toggle-btn" // Add a class to exclude this from dragging
           onClick={() => setIsCollapsed(!isCollapsed)}
           style={{
             background: 'rgba(255,255,255,0.1)',
@@ -72,6 +72,7 @@ export default function DeforestationUI({
     </Draggable>
   );
 }
+
 
 
 
