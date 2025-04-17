@@ -60,12 +60,13 @@ const viewBounds = useMemo(() => {
           })
         };
         
+        const isMobile = window.innerWidth < 640;
         const texture = createHotspotTexture(
           filteredData,
           4096, 
           2048,
           categoryColors, // Pass your mapping here
-          0.6
+          isMobile ? 0.9 : 0.6    // more opaque on mobile
         );
         
         setHotspotTexture(texture);
