@@ -17,7 +17,7 @@ export default function DeforestationUI({
   const nodeRef = useRef<HTMLDivElement>(null);
 
   return (
-    <Draggable nodeRef={nodeRef as React.RefObject<HTMLElement>} cancel=".toggle-btn">
+    <Draggable nodeRef={nodeRef as React.RefObject<HTMLElement>} cancel=".toggle-btn, input, label">
       <div
         ref={nodeRef}
         style={{
